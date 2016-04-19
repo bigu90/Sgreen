@@ -1,6 +1,8 @@
 package ch.bfh.happytomatoes.sgreen;
 
+import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -23,12 +25,16 @@ import java.util.HashMap;
 /**
  * Created by Matthias on 18.04.2016.
  */
-public class DBService extends Service {
+public class DBtoMySQLconnection {
     HashMap<String, String> queryValues;
-    DBHelper controller = new DBHelper(this);
+    DBHelper controller;
 
-    @Override
-    public void onCreate() {
+    public DBtoMySQLconnection(Context context){
+        controller = new DBHelper(context);
+    }
+
+
+    public void getDataFromServer() {
         // Create AsycHttpClient object
         AsyncHttpClient client = new AsyncHttpClient();
         // Http Request Params Object
@@ -51,7 +57,7 @@ public class DBService extends Service {
         });
     }
 
-    public void updateSQLiteData(String response) {
+    private void updateSQLiteData(String response) {
         ArrayList<HashMap<String, String>> dataSyncList;
         dataSyncList = new ArrayList<HashMap<String, String>>();
         // Create GSON object
@@ -83,7 +89,7 @@ public class DBService extends Service {
             e.printStackTrace();
         }
     }
-    public void updateSQLiteSensor(String response) {
+    private void updateSQLiteSensor(String response) {
         ArrayList<HashMap<String, String>> dataSyncList = new ArrayList<HashMap<String, String>>();
         // Create GSON object
         Gson gson = new GsonBuilder().create();
@@ -113,17 +119,5 @@ public class DBService extends Service {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
-
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 }
