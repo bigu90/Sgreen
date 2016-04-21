@@ -10,7 +10,8 @@
     tools:context="ch.bfh.happytomatoes.sgreen.MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/text"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:paddingTop="100dp"/>
 </RelativeLayout>
