@@ -51,7 +51,8 @@ public class DBHelper  extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         String[] columns = {"sensorID"};
-        if(database.query("measurment", columns, queryValues.get("sensorID"), null, null, null, null) == null) {
+        Cursor cursor = database.query("measurment", null, queryValues.get("sensorID") + " = sensorID", null, null, null, null);
+        if(cursor.getCount() == 0) {
             values.put("sensorID", queryValues.get("sensorID"));
             values.put("type", queryValues.get("type"));
             values.put("location", queryValues.get("location"));
