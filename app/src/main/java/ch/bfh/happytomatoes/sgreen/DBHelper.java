@@ -12,11 +12,12 @@ package ch.bfh.happytomatoes.sgreen;
 public class DBHelper  extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Sgreen";
     public static final int DATABASE_VERSION = 1;
+    private Context context;
 
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
+        this.context = context;
 
         //delete(getWritableDatabase());
     }
@@ -27,32 +28,36 @@ public class DBHelper  extends SQLiteOpenHelper {
         getWritableDatabase().delete("measurment", null, null);
         database.execSQL("CREATE TABLE measurment(_id INTEGER PRIMARY KEY, sensorID TEXT, value TEXT, time TEXT);");
 
-        database.execSQL("CREATE TABLE " + "sensor" + " (" + "sensor_id"
-                + " INTEGER PRIMARY KEY, " + "type"
-                + " TEXT," + "location" + " TEXT," + "name" + "TEXT" + ");");
+        database.execSQL("CREATE TABLE sensor(sensor_id INTEGER PRIMARY KEY, type TEXT, location TEXT, name TEXT);");
     }
-    /**
+     /**
      * Inserts Data into SQLite DB
      * @param queryValues
      */
     public void insertData(HashMap<String, String> queryValues) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("_id", queryValues.get("id"));
-        values.put("sensorID", queryValues.get("sensorID"));
-        values.put("value", queryValues.get("value"));
-        values.put("time", queryValues.get("time"));
-        database.insert("measurment", null, values);
+        String[] columns = {"_id"};
+        if(database.query("measurment", columns, queryValues.get("id"), null, null, null, null) == null) {
+            values.put("_id", queryValues.get("id"));
+            values.put("sensorID", queryValues.get("sensorID"));
+            values.put("value", queryValues.get("value"));
+            values.put("time", queryValues.get("time"));
+            database.insertOrThrow("measurment", null, values);
+        }
         database.close();
     }
     public void insertSensor(HashMap<String, String> queryValues) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("sensorID", queryValues.get("sensorID"));
-        values.put("type", queryValues.get("type"));
-        values.put("location", queryValues.get("location"));
-        values.put("name", queryValues.get("name"));
-        database.insert("sensor", null, values);
+        String[] columns = {"sensorID"};
+        if(database.query("measurment", columns, queryValues.get("sensorID"), null, null, null, null) == null) {
+            values.put("sensorID", queryValues.get("sensorID"));
+            values.put("type", queryValues.get("type"));
+            values.put("location", queryValues.get("location"));
+            values.put("name", queryValues.get("name"));
+            database.insert("sensor", null, values);
+        }
         database.close();
     }
 
