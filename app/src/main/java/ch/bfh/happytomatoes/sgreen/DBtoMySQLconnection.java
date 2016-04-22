@@ -31,7 +31,6 @@ public class DBtoMySQLconnection {
 
     public DBtoMySQLconnection(Context context, DBHelper helper) {
         controller = helper;
-        System.out.println("111HIIIIIEEEEEEEERRRRR");
     }
 
 
@@ -43,7 +42,6 @@ public class DBtoMySQLconnection {
             RequestParams params = new RequestParams();
             // Make Http call to getData.php
 
-            System.out.println("HIIIIIEEEEEEEERRRRR");
             //client.post("http://213.239.210.108:9000/getMeasurements.php", params, new AsyncHttpResponseHandler() {
                     client.post("http://sgreen.bigu.ch/getMeasurements.php", params, new AsyncHttpResponseHandler() {
                         @Override
@@ -55,13 +53,13 @@ public class DBtoMySQLconnection {
 
 
 
-/*            client.post("http://213.239.210.108:9000/getSensors.php", params, new AsyncHttpResponseHandler() {
+            client.post("http://sgreen.bigu.ch/getSensors.php", params, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(String response) {
                     // Update SQLite DB with response sent by getSensors.php
                     updateSQLiteSensor(response);
                 }
-            });*/
+            });
         }
 
     private void updateSQLiteData(String response) {
@@ -77,7 +75,7 @@ public class DBtoMySQLconnection {
             if(arr.length() != 0){
                 // Loop through each array element, get JSON object which has
                 //for (int i = 0; i < arr.length(); i++) {
-                    for (int i = 0; i < 100; i++) {
+                    for (int i = 0; i < arr.length(); i++) {
                     // Get JSON object
                     JSONObject obj = (JSONObject) arr.get(i);
                     // DB QueryValues Object to insert into SQLite
