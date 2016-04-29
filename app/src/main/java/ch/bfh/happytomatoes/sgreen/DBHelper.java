@@ -75,6 +75,12 @@ public class DBHelper  extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getLastTen(int sensorID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT * FROM measurment WHERE sensorID = " + sensorID + " order by _id desc LIMIT 10";
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        return cursor;
+    }
 
 
     @Override

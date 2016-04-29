@@ -1,6 +1,7 @@
 package ch.bfh.happytomatoes.sgreen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
@@ -82,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
         cursor.moveToNext();
 
-            long ID = cursor.getLong(0);
-            long SensorID = cursor.getLong(1);
-            long value = cursor.getLong(2);
+            double ID = cursor.getDouble(0);
+            double SensorID = cursor.getDouble(1);
+            double value = cursor.getDouble(2);
             String date = cursor.getString(3);
 
         Cursor cursor2 = dbHelper.getSensor((int)SensorID);
@@ -115,6 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void refresh(View view){
         onResume();
+    }
+
+    public void newActivity(View view){
+        Intent intent = new Intent(this, ChartActivity.class);
+        intent.putExtra("sensorID", 1);
+        startActivity(intent);
     }
 }
 
