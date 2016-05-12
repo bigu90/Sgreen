@@ -1,6 +1,7 @@
 package ch.bfh.happytomatoes.sgreen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,9 @@ public class MainActivity extends Activity {
 
         dbUpdate.getDataFromServer();
 
+        // use this to start and trigger a service
+        Intent i= new Intent(getBaseContext(), DbUpdateService.class);
+        startService(i);
 
         //halllooo rivella
 

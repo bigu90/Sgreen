@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sgreen</string>
+    <string name="service_name">Sgreen Database Update Service</string>
 </resources>

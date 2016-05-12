@@ -21,4 +21,10 @@
         </activity>
     </application>
 
+    <service
+        android:name="DbUpdateService"
+        android:label="@string/service_name"
+        >
+    </service>
+
 </manifest>
