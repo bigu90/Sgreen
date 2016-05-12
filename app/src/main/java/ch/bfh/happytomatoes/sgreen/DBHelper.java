@@ -25,7 +25,7 @@ public class DBHelper  extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         //database.execSQL("DROP TABLE IF EXISTS measurment");
         //getWritableDatabase().delete("measurment", null, null);
-        database.execSQL("CREATE TABLE measurment(_id INTEGER PRIMARY KEY, sensorID TEXT, value TEXT, time TEXT);");
+        database.execSQL("CREATE TABLE measurment(_id INTEGER PRIMARY KEY, sensorID TEXT, value REAL, time TEXT);");
 
         database.execSQL("CREATE TABLE sensor(sensor_id INTEGER PRIMARY KEY, type TEXT, location TEXT, name TEXT);");
     }
@@ -37,7 +37,6 @@ public class DBHelper  extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         Cursor cursor = database.query("measurment", null, queryValues.get("id") + " = _id", null, null, null, null);
-        System.out.println("count " + cursor.getCount());
         if(cursor.getCount() == 0) {
             values.put("_id", queryValues.get("id"));
             values.put("sensorID", queryValues.get("sensorID"));
@@ -50,10 +49,9 @@ public class DBHelper  extends SQLiteOpenHelper {
     public void insertSensor(HashMap<String, String> queryValues) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        String[] columns = {"sensorID"};
-        Cursor cursor = database.query("measurment", null, queryValues.get("sensorID") + " = sensorID", null, null, null, null);
+        Cursor cursor = database.query("sensor", null, queryValues.get("sensorID") + " = sensor_id", null, null, null, null);
         if(cursor.getCount() == 0) {
-            values.put("sensorID", queryValues.get("sensorID"));
+            values.put("sensor_id", queryValues.get("sensorID"));
             values.put("type", queryValues.get("type"));
             values.put("location", queryValues.get("location"));
             values.put("name", queryValues.get("name"));
@@ -61,6 +59,29 @@ public class DBHelper  extends SQLiteOpenHelper {
         }
         database.close();
     }
+
+    public Cursor getTemperature(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT * FROM measurment order by _id desc limit 1";
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        return cursor;
+    }
+
+    public Cursor getSensor(int ID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT * FROM sensor Where sensor_id = " + ID;
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        return cursor;
+    }
+
+
+    public Cursor getLastTen(int sensorID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT * FROM measurment WHERE sensorID = " + sensorID + " order by _id desc LIMIT 10";
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        return cursor;
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
@@ -74,6 +95,7 @@ public class DBHelper  extends SQLiteOpenHelper {
     public void delete(SQLiteDatabase db) {
         //db.execSQL("Sgreen");
         db.execSQL("DROP TABLE IF EXISTS " + "measurment");
+        db.execSQL("DROP TABLE IF EXISTS " + "sensor");
         onCreate(db);
     }
 }
