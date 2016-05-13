@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ChartActivity extends AppCompatActivity {
     private DBHelper dbHelper;
-    int sensorID;
+    long sensorID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,9 @@ public class ChartActivity extends AppCompatActivity {
         //getSupportActionBar().setTitle("Sgreeeeen");
         //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
 
-        getIntent().getIntExtra("sensorID", 0);
+        sensorID = getIntent().getLongExtra("sensorID", 0);
 
+        System.out.println("chart" + sensorID);
 
         dbHelper = new DBHelper(this);
         setChart();
@@ -60,7 +61,7 @@ public class ChartActivity extends AppCompatActivity {
     private List<ILineDataSet> getValues(){
         //Cursor cursor = dbHelper.getLastTen(sensorID);
         int counter = 0;
-        Cursor cursor = dbHelper.getLastTen(1);
+        Cursor cursor = dbHelper.getLastTen2(sensorID);
         System.out.println(cursor.getColumnCount());
         List<Entry> entries = new ArrayList<>();
 

@@ -62,7 +62,8 @@ public class DBHelper  extends SQLiteOpenHelper {
 
     public Cursor getTemperature(){
         SQLiteDatabase db = this.getReadableDatabase();
-        final String MY_QUERY = "SELECT * FROM measurment order by _id desc limit 1";
+        //final String MY_QUERY = "SELECT * FROM measurment order by _id desc limit 1";
+        final String MY_QUERY = "SELECT * FROM  sensor join measurment WHERE sensor_id = sensorID group by name order by sensor_id asc";
         Cursor cursor = db.rawQuery(MY_QUERY, null);
         return cursor;
     }
@@ -82,6 +83,18 @@ public class DBHelper  extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getLastTen2(long measurementID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT * FROM measurment WHERE _id = " + measurementID ;
+        Cursor tempCursor = db.rawQuery(MY_QUERY, null);
+        tempCursor.moveToNext();
+        Long id = tempCursor.getLong(1);
+        System.out.println("id   " + tempCursor.getLong(1));
+        final String MY_QUERY2 = "SELECT * FROM measurment WHERE sensorID = " + id + " order by _id desc LIMIT 10";
+        Cursor cursor = db.rawQuery(MY_QUERY2, null);
+        System.out.println("CUUURRSSOOOOOOR  " + cursor.getCount());
+        return cursor;
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
