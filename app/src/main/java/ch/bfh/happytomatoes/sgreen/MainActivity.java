@@ -9,13 +9,22 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.CursorAdapter;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private DBtoMySQLconnection dbUpdate;
     //private static String ORDER_BY = "time" + " DESC";
     private DBHelper dbHelper;
+
 
 
     @Override
@@ -26,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setTitle("Sgreeeeen");
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-
-
-
 
 
 
@@ -73,10 +79,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private void showEvents() {
+        Cursor cursor = dbHelper.getTemperature();
+        String[] fromFields = new String[] {"name", "value", "time"};
+        int[] to = new int[] {R.id.sensor_name, R.id.temp_text, R.id.sensor_informations};
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_field, cursor, fromFields, to, 0);
+        ListView list = (ListView) findViewById(R.id.listview_sensors);
+        list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3)
+            {
+                //String value = (String)adapter.getItemAtPosition(position);
+                int id = (int) adapter.getItemIdAtPosition(position);
+                adapter.getId();
+
+                Intent intent = new Intent(getApplicationContext(), ChartActivity.class);
+                System.out.println("measurement id  " + adapter.getItemIdAtPosition(position));
+
+                intent.putExtra("sensorID", adapter.getItemIdAtPosition(position));
+                startActivity(intent);
+            }
+        });
+
+    }
+
+
+
+    private void showEvent() {
         // Stuff them all into a big string
         StringBuilder infoText;
 
@@ -112,7 +145,10 @@ public class MainActivity extends AppCompatActivity {
 
         TextView info = (TextView) findViewById(R.id.sensor_informations);
         info.setText(infoText);
-    }
+
+        }
+
+
 
 
 
