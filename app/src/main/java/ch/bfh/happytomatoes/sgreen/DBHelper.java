@@ -27,7 +27,7 @@ public class DBHelper  extends SQLiteOpenHelper {
         //getWritableDatabase().delete("measurment", null, null);
         database.execSQL("CREATE TABLE measurment(_id INTEGER PRIMARY KEY, sensorID TEXT, value REAL, time TEXT);");
 
-        database.execSQL("CREATE TABLE sensor(sensor_id INTEGER PRIMARY KEY, type TEXT, location TEXT, name TEXT);");
+        database.execSQL("CREATE TABLE sensor(sensor_id INTEGER PRIMARY KEY, type TEXT, location TEXT, name TEXT, visible REAL, minValue REAL, maxValue REAL);");
     }
      /**
      * Inserts Data into SQLite DB
@@ -55,15 +55,32 @@ public class DBHelper  extends SQLiteOpenHelper {
             values.put("type", queryValues.get("type"));
             values.put("location", queryValues.get("location"));
             values.put("name", queryValues.get("name"));
+            values.put("visible", 1);
+            values.put("minValue", 0);
+            values.put("maxValue", 0);
             database.insert("sensor", null, values);
         }
         database.close();
     }
 
+    public void updateSensor(int id, boolean show, double minValue, double maxValue){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        int showSensor = 0;
+        if(show){showSensor = 1;}
+        values.put("visible", showSensor);
+        values.put("minValue", minValue);
+        values.put("maxValue", maxValue);
+
+        // uptade Row
+        database.update("sensor", values, "sensor_id =" + id, null);
+        database.close(); // Closing database connection
+    }
+
     public Cursor getTemperature(){
         SQLiteDatabase db = this.getReadableDatabase();
         //final String MY_QUERY = "SELECT * FROM measurment order by _id desc limit 1";
-        final String MY_QUERY = "SELECT * FROM  sensor join measurment WHERE sensor_id = sensorID group by name order by sensor_id asc";
+        final String MY_QUERY = "SELECT * FROM  sensor join measurment WHERE sensor_id = sensorID AND visible > 0 group by name order by sensor_id asc";
         Cursor cursor = db.rawQuery(MY_QUERY, null);
         return cursor;
     }
@@ -71,6 +88,27 @@ public class DBHelper  extends SQLiteOpenHelper {
     public Cursor getSensor(int ID){
         SQLiteDatabase db = this.getReadableDatabase();
         final String MY_QUERY = "SELECT * FROM sensor Where sensor_id = " + ID;
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        return cursor;
+    }
+
+    public Cursor getSensors(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT rowid as _id, name FROM sensor";
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        return cursor;
+    }
+
+    public Cursor getMinMaxValues(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT minValue, maxValue FROM sensor Where sensor_id =" + id;
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        return cursor;
+    }
+
+    public Cursor isVisible(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT visible FROM sensor Where sensor_id =" + id;
         Cursor cursor = db.rawQuery(MY_QUERY, null);
         return cursor;
     }

@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ChartActivity extends AppCompatActivity {
     private DBHelper dbHelper;
-    long sensorID;
+    private long sensorID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +27,6 @@ public class ChartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chart);
         Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        //getSupportActionBar().setTitle("Sgreeeeen");
-        //getSupportActionBar().setLogo(R.mipmap.ic_launcher);
 
         sensorID = getIntent().getLongExtra("sensorID", 0);
 
