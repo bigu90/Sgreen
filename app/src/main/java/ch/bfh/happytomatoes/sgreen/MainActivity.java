@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Main_Fragment(), "Data");
-        adapter.addFragment(new Sensor_Fragment(), "Sensors");
+        adapter.addFragment(new MainFragment(), "Data");
+        adapter.addFragment(new SensorFragment(), "Sensors");
         viewPager.setAdapter(adapter);
     }
 

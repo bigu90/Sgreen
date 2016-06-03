@@ -17,12 +17,12 @@ package ch.bfh.happytomatoes.sgreen;
     import android.widget.SimpleCursorAdapter;
 
 
-public class Sensor_Fragment extends Fragment {
+public class SensorFragment extends Fragment {
     private DBHelper dbHelper;
     private SimpleCursorAdapter adapter;
     private ListView listView;
 
-    public Sensor_Fragment() {
+    public SensorFragment() {
         // Required empty public constructor
     }
 

@@ -18,7 +18,7 @@ import android.widget.SimpleCursorAdapter;
 /**
  * Created by Matthias on 29.04.2016.
  */
-public class Main_Fragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private DBtoMySQLconnection dbUpdate;
     //private static String ORDER_BY = "time" + " DESC";
     private DBHelper dbHelper;
@@ -26,7 +26,7 @@ public class Main_Fragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
 
-        public Main_Fragment() {
+        public MainFragment() {
             // Required empty public constructor
         }
 
