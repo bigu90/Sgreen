@@ -30,21 +30,15 @@ public class ChartActivity extends AppCompatActivity {
 
         sensorID = getIntent().getLongExtra("sensorID", 0);
 
-        System.out.println("chart" + sensorID);
-
         dbHelper = new DBHelper(this);
         setChart();
-
-
-
     }
+
 
     private void setChart(){
         LineChart chart = (LineChart) findViewById(R.id.chart);
         chart.setAutoScaleMinMaxEnabled(true);
         chart.setTouchEnabled(false);
-        //chart.canScrollVertically(1);
-        //chart.setBackgroundColor(getResources().getColor(R.color.chartBackground));
 
 
         ArrayList<String> xVals = new ArrayList<String>();
@@ -57,7 +51,6 @@ public class ChartActivity extends AppCompatActivity {
 
 
     private List<ILineDataSet> getValues(){
-        //Cursor cursor = dbHelper.getLastTen(sensorID);
         int counter = 0;
         Cursor cursor = dbHelper.getLastTen2(sensorID);
         System.out.println(cursor.getColumnCount());
@@ -78,6 +71,7 @@ public class ChartActivity extends AppCompatActivity {
         return dataSets;
     }
 
+
     private List<String> getXaxisData(){
         StringBuilder xAxisText;
         Cursor cursor = dbHelper.getLastTen(1);
@@ -87,10 +81,9 @@ public class ChartActivity extends AppCompatActivity {
             xAxisText = new StringBuilder(cursor.getString(3));
             xAxisText.delete(0, 11);
             entries.add(xAxisText.toString());
-
         }
+
 
         return entries;
     }
-
 }
