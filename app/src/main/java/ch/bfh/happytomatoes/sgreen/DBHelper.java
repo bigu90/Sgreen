@@ -132,13 +132,12 @@ public class DBHelper  extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor getLastTen2(long measurementID){
+    public Cursor getLastTenEntrys(long measurementID){
         SQLiteDatabase db = this.getReadableDatabase();
         final String MY_QUERY = "SELECT * FROM measurment WHERE " + MEASUREMENT_ID + " = " + measurementID ;
         Cursor tempCursor = db.rawQuery(MY_QUERY, null);
         tempCursor.moveToNext();
         Long id = tempCursor.getLong(1);
-        System.out.println("id   " + tempCursor.getLong(1));
         final String MY_QUERY2 = "SELECT * FROM measurment WHERE " + MEASUREMENT_SENSOR_ID + " = " + id + " order by " + MEASUREMENT_ID + " desc LIMIT 10";
         Cursor cursor = db.rawQuery(MY_QUERY2, null);
         return cursor;

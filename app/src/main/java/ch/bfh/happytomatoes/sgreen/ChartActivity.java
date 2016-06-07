@@ -19,7 +19,8 @@ import java.util.List;
  */
 public class ChartActivity extends AppCompatActivity {
     private DBHelper dbHelper;
-    private long sensorID;
+    private long measurementID;
+    private LineChart chart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class ChartActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar)findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        sensorID = getIntent().getLongExtra("sensorID", 0);
+        measurementID = getIntent().getLongExtra("sensorID", 0);
 
         dbHelper = new DBHelper(this);
         setChart();
@@ -36,13 +37,10 @@ public class ChartActivity extends AppCompatActivity {
 
 
     private void setChart(){
-        LineChart chart = (LineChart) findViewById(R.id.chart);
+        chart = (LineChart) findViewById(R.id.chart);
         chart.setAutoScaleMinMaxEnabled(true);
         chart.setTouchEnabled(false);
-
-
-        ArrayList<String> xVals = new ArrayList<String>();
-        xVals.add("test1"); xVals.add("test2"); xVals.add("test3"); xVals.add("test4");
+        chart.setDescription("Temperature");
 
         LineData lineData = new LineData(getXaxisData(), getValues());
         chart.setData(lineData);
@@ -52,17 +50,18 @@ public class ChartActivity extends AppCompatActivity {
 
     private List<ILineDataSet> getValues(){
         int counter = 0;
-        Cursor cursor = dbHelper.getLastTen2(sensorID);
+        Cursor cursor = dbHelper.getLastTenEntrys(measurementID);
         System.out.println(cursor.getColumnCount());
         List<Entry> entries = new ArrayList<>();
 
-        while(cursor.moveToNext()){
+        cursor.moveToLast();
+        entries.add(new Entry(cursor.getFloat(2), counter++));
+        while(cursor.moveToPrevious()){
 
             entries.add(new Entry(cursor.getFloat(2), counter++));
-            System.out.println(cursor.getFloat(2));
-
         }
-        LineDataSet lineDataSet = new LineDataSet(entries, "Test");
+
+        LineDataSet lineDataSet = new LineDataSet(entries, "Verlauf");
         lineDataSet.setDrawCubic(true);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
@@ -74,10 +73,15 @@ public class ChartActivity extends AppCompatActivity {
 
     private List<String> getXaxisData(){
         StringBuilder xAxisText;
-        Cursor cursor = dbHelper.getLastTen(1);
+        Cursor cursor = dbHelper.getLastTenEntrys((int)measurementID);
+        System.out.println("cursor :" + cursor.getCount());
         List<String> entries = new ArrayList<>();
+        cursor.moveToLast();
+        xAxisText = new StringBuilder(cursor.getString(3));
+        xAxisText.delete(0, 11);
+        entries.add(xAxisText.toString());
 
-        while(cursor.moveToNext()){
+        while(cursor.moveToPrevious()){
             xAxisText = new StringBuilder(cursor.getString(3));
             xAxisText.delete(0, 11);
             entries.add(xAxisText.toString());
