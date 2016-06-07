@@ -2,6 +2,7 @@ package ch.bfh.happytomatoes.sgreen;
 
         import java.util.ArrayList;
         import java.util.HashMap;
+        import java.util.Map;
 
         import android.content.ContentValues;
         import android.content.Context;
@@ -141,6 +142,31 @@ public class DBHelper  extends SQLiteOpenHelper {
         final String MY_QUERY2 = "SELECT * FROM measurment WHERE " + MEASUREMENT_SENSOR_ID + " = " + id + " order by " + MEASUREMENT_ID + " desc LIMIT 10";
         Cursor cursor = db.rawQuery(MY_QUERY2, null);
         return cursor;
+    }
+    public Map<Integer, Integer[]> getMinMaxAllSensors() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        final String MY_QUERY = "SELECT " + SENSOR_ID + ", " + SENSOR_MIN_VALUE + ", " + SENSOR_MAX_VALUE + " FROM sensor" ;
+        Cursor cursor = db.rawQuery(MY_QUERY, null);
+        Map<Integer, Integer[]> map = new HashMap<Integer, Integer[]>();
+        cursor.moveToLast();
+        System.out.println(cursor);
+        do {
+            Integer[] array = new Integer[2];
+            if(!cursor.isNull(1) && cursor.getInt(1) != 0) {
+                array[0] = cursor.getInt(1);
+                System.out.println("minnn " +cursor.getInt(1));
+            }
+            if(!cursor.isNull(2) && cursor.getInt(2) != 0) {
+                array[1] = cursor.getInt(2);
+                System.out.println("maxxx " +cursor.getInt(2));
+            }
+            if(!cursor.isNull(0)) {
+                map.put(cursor.getInt(0), array);
+            }
+
+        }while(cursor.moveToPrevious());
+        return map;
+
     }
 
     @Override

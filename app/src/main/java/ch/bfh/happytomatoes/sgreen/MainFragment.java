@@ -55,6 +55,7 @@ public class MainFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
     protected void onStart(Bundle savedInstanceState) {
+        fetchData();
 
     }
 

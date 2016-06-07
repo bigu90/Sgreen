@@ -31,12 +31,11 @@
             android:parentActivityName="ch.bfh.happytomatoes.sgreen.MainActivity" >
         </activity>
 
+        <receiver
+            android:name=".DbUpdater"
+            android:label="@string/receiver_name"
+            >
+        </receiver>
+
     </application>
-
-    <service
-        android:name=".DbUpdateService"
-        android:label="@string/service_name"
-        >
-    </service>
-
 </manifest>
